@@ -1,0 +1,477 @@
+<!doctype html>
+<!-- Path: src/main/resources/templates/applicant-detail.html -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDTS — Applicant Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+    <link rel="stylesheet" th:href="@{/css/applicant.css}" />
+  </head>
+  <body>
+    <!-- Sidebar (same as dashboard) -->
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <img th:src="@{/assets/logo.png}" alt="PUP" class="sidebar-logo" />
+        <div class="sidebar-brand">
+          <span class="sidebar-brand-name"
+            >PUP Document<br />Tracking System</span
+          >
+          <span class="sidebar-brand-sub">Open University System</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="/dashboard" class="nav-item">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <rect x="3" y="3" width="7" height="7" />
+            <rect x="14" y="3" width="7" height="7" />
+            <rect x="14" y="14" width="7" height="7" />
+            <rect x="3" y="14" width="7" height="7" />
+          </svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="/applicants/new" class="nav-item">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+            <circle cx="9" cy="7" r="4" />
+            <line x1="19" y1="8" x2="19" y2="14" />
+            <line x1="22" y1="11" x2="16" y2="11" />
+          </svg>
+          <span>New Applicant</span>
+        </a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="user-info">
+          <div class="user-avatar">A</div>
+          <div class="user-details">
+            <span class="user-name">Staff</span>
+            <span class="user-role">Registrar</span>
+          </div>
+        </div>
+        <a href="/logout" class="logout-btn">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+        </a>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <a href="/dashboard" class="back-link">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+            Dashboard
+          </a>
+          <span class="breadcrumb-sep">/</span>
+          <span class="page-title" th:text="${applicant.fullName}"
+            >Applicant Profile</span
+          >
+        </div>
+        <div class="topbar-right">
+          <a
+            th:href="@{/applicants/{id}/edit(id=${applicant.applicantId})}"
+            class="btn-edit-profile"
+          >
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+              />
+              <path
+                d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+              />
+            </svg>
+            Edit Profile
+          </a>
+        </div>
+      </header>
+
+      <div class="detail-layout">
+        <!-- Left: Profile Info -->
+        <aside class="profile-aside">
+          <div class="profile-card">
+            <div class="profile-avatar-wrap">
+              <div
+                class="profile-avatar"
+                th:text="${#strings.substring(applicant.lastName,0,1).toUpperCase()}"
+              >
+                J
+              </div>
+            </div>
+            <h2 class="profile-name" th:text="${applicant.fullName}">
+              Juan dela Cruz
+            </h2>
+            <p class="profile-email" th:text="${applicant.emailAddress}">
+              juan@email.com
+            </p>
+            <div class="profile-badges">
+              <span
+                class="curriculum-tag"
+                th:text="${applicant.educationalBackgroundCategoryId}"
+                >SHS</span
+              >
+              <span
+                class="status-pill"
+                th:classappend="${applicant.enrollmentStatus.name() == 'continuing'} ? 'pill-green' : 'pill-gray'"
+                th:text="${applicant.enrollmentStatus.name() == 'continuing' ? 'Continuing' : 'On Leave'}"
+              >
+                Continuing
+              </span>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <h4 class="info-card-title">Personal Information</h4>
+            <dl class="info-list">
+              <div class="info-row">
+                <dt>Date of Birth</dt>
+                <dd
+                  th:text="${applicant.birthDate != null ? #temporals.format(applicant.birthDate, 'MMMM dd, yyyy') : '—'}"
+                >
+                  —
+                </dd>
+              </div>
+              <div class="info-row">
+                <dt>Sex</dt>
+                <dd th:text="${applicant.sex == 1 ? 'Male' : 'Female'}">—</dd>
+              </div>
+              <div class="info-row">
+                <dt>Civil Status</dt>
+                <dd
+                  th:text="${applicant.civilStatus == 1 ? 'Single' : applicant.civilStatus == 2 ? 'Married' : 'Widowed'}"
+                >
+                  —
+                </dd>
+              </div>
+              <div class="info-row">
+                <dt>Contact</dt>
+                <dd th:text="${applicant.contactNumber ?: '—'}">—</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div class="info-card">
+            <h4 class="info-card-title">Address</h4>
+            <dl class="info-list">
+              <div class="info-row">
+                <dt>Street</dt>
+                <dd th:text="${applicant.houseNumberStreet ?: '—'}">—</dd>
+              </div>
+              <div class="info-row">
+                <dt>Barangay</dt>
+                <dd th:text="${applicant.barangay ?: '—'}">—</dd>
+              </div>
+              <div class="info-row">
+                <dt>City / Municipality</dt>
+                <dd th:text="${applicant.cityMunicipality ?: '—'}">—</dd>
+              </div>
+              <div class="info-row">
+                <dt>Province</dt>
+                <dd th:text="${applicant.province ?: '—'}">—</dd>
+              </div>
+              <div class="info-row">
+                <dt>Region</dt>
+                <dd th:text="${applicant.region ?: '—'}">—</dd>
+              </div>
+              <div class="info-row">
+                <dt>ZIP Code</dt>
+                <dd th:text="${applicant.zipCode ?: '—'}">—</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div class="info-card">
+            <h4 class="info-card-title">Record Info</h4>
+            <dl class="info-list">
+              <div class="info-row">
+                <dt>Profile Created</dt>
+                <dd
+                  th:text="${applicant.createdAt != null ? #temporals.format(applicant.createdAt, 'MMM dd, yyyy') : '—'}"
+                >
+                  —
+                </dd>
+              </div>
+              <div class="info-row">
+                <dt>Last Updated</dt>
+                <dd
+                  th:text="${applicant.updatedAt != null ? #temporals.format(applicant.updatedAt, 'MMM dd, yyyy') : 'Never'}"
+                >
+                  —
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </aside>
+
+        <!-- Right: Documents -->
+        <section class="docs-main">
+          <!-- Upload Panel -->
+          <div class="upload-panel">
+            <h3 class="panel-title">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+              </svg>
+              Upload Document
+            </h3>
+            <form
+              id="upload-form"
+              enctype="multipart/form-data"
+              class="upload-form"
+            >
+              <input
+                type="hidden"
+                name="applicationId"
+                th:value="${applicant.applicantId}"
+              />
+              <div class="upload-row">
+                <select name="typeId" class="filter-select" required>
+                  <option value="">— Select Document Type —</option>
+                  <option value="1">PSA Birth Certificate</option>
+                  <option value="2">Form 137 / Form 138</option>
+                  <option value="3">Transcript of Records (TOR)</option>
+                  <option value="4">Diploma (Certified Copy)</option>
+                  <option value="5">2x2 ID Pictures (4 pcs)</option>
+                  <option value="6">X-Ray Result</option>
+                  <option value="7">Certificate of Good Moral Character</option>
+                  <option value="8">NBI / Police Clearance</option>
+                  <option value="9">Letter of Endorsement</option>
+                  <option value="10">ALS Certificate of Rating</option>
+                  <option value="11">TVET National Certificate</option>
+                  <option value="12">PSA Marriage Certificate</option>
+                </select>
+                <label class="file-label">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
+                  <span id="file-label-text">Choose file…</span>
+                  <input
+                    type="file"
+                    name="file"
+                    accept="image/*,.pdf"
+                    required
+                    id="file-input"
+                    onchange="updateFileLabel(this)"
+                  />
+                </label>
+                <button
+                  type="button"
+                  class="btn-filter"
+                  onclick="submitUpload('upload-form')"
+                >
+                  Upload
+                </button>
+              </div>
+              <p class="upload-hint">Accepted: JPEG, PNG, PDF · Max: 300 KB</p>
+            </form>
+          </div>
+
+          <!-- Documents Table -->
+          <div class="table-section" style="padding: 0; margin-top: 20px">
+            <div class="table-header">
+              <h3>
+                Submitted Documents
+                <span
+                  class="count-badge"
+                  th:text="${documents != null ? documents.size() : 0}"
+                  >0</span
+                >
+              </h3>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Document Type</th>
+                    <th>Tracking No.</th>
+                    <th>Status</th>
+                    <th>Uploaded</th>
+                    <th>Last Action</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:if="${documents == null or documents.isEmpty()}">
+                    <td colspan="6" class="empty-row">
+                      No documents uploaded yet.
+                    </td>
+                  </tr>
+                  <tr th:each="doc : ${documents}" class="table-row">
+                    <td
+                      th:text="${doc.requirementType != null ? doc.requirementType.typeName : '—'}"
+                    >
+                      PSA Birth Certificate
+                    </td>
+                    <td>
+                      <code class="mono" th:text="${doc.trackingNo}"
+                        >DOC-2025-00001</code
+                      >
+                    </td>
+                    <td>
+                      <span
+                        class="doc-status-badge"
+                        th:style="'background:' + (doc.requirementStatus != null ? doc.requirementStatus.statusColor : '#ccc') + '22; color:' + (doc.requirementStatus != null ? doc.requirementStatus.statusColor : '#666') + '; border:1.5px solid ' + (doc.requirementStatus != null ? doc.requirementStatus.statusColor : '#ccc') + '55;'"
+                        th:text="${doc.requirementStatus != null ? doc.requirementStatus.statusName : 'Unknown'}"
+                      >
+                        Pending
+                      </span>
+                    </td>
+                    <td
+                      th:text="${doc.uploadDate != null ? #temporals.format(doc.uploadDate, 'MMM dd, yyyy') : '—'}"
+                    >
+                      —
+                    </td>
+                    <td
+                      th:text="${doc.processedAt != null ? #temporals.format(doc.processedAt, 'MMM dd, yyyy') : '—'}"
+                    >
+                      —
+                    </td>
+                    <td>
+                      <div
+                        class="action-btns"
+                        th:if="${doc.requirementStatusId != 3 and doc.requirementStatusId != 4}"
+                      >
+                        <button
+                          class="action-btn btn-receive"
+                          title="Mark Received"
+                          th:onclick="'openStatusAction(' + doc.requirementId + ', \'receive\', \'' + (doc.requirementType != null ? doc.requirementType.typeName : '') + '\', \'' + applicant.emailAddress + '\', \'' + applicant.fullName + '\')'"
+                        >
+                          <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                          >
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                        </button>
+                        <button
+                          class="action-btn btn-reject"
+                          title="Reject"
+                          th:onclick="'openStatusAction(' + doc.requirementId + ', \'reject\', \'' + (doc.requirementType != null ? doc.requirementType.typeName : '') + '\', \'' + applicant.emailAddress + '\', \'' + applicant.fullName + '\')'"
+                        >
+                          <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                          >
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                          </svg>
+                        </button>
+                        <button
+                          class="action-btn btn-resub"
+                          title="Flag for Resubmission"
+                          th:onclick="'openStatusAction(' + doc.requirementId + ', \'resubmit\', \'' + (doc.requirementType != null ? doc.requirementType.typeName : '') + '\', \'' + applicant.emailAddress + '\', \'' + applicant.fullName + '\')'"
+                        >
+                          <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                          >
+                            <polyline points="1 4 1 10 7 10" />
+                            <path d="M3.51 15a9 9 0 1 0 .49-3.97" />
+                          </svg>
+                        </button>
+                      </div>
+                      <span
+                        th:if="${doc.requirementStatusId == 3 or doc.requirementStatusId == 4}"
+                        style="
+                          font-size: 0.75rem;
+                          color: #aaa;
+                          font-style: italic;
+                        "
+                        >Finalized</span
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script th:src="@{/js/dashboard.js}"></script>
+    <script>
+      function updateFileLabel(input) {
+        const label = document.getElementById("file-label-text");
+        if (label && input.files && input.files[0]) {
+          label.textContent = input.files[0].name;
+        }
+      }
+    </script>
+  </body>
+</html>
